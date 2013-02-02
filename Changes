@@ -1,0 +1,5 @@
+Revision history for Perl extension D64::Disk::Dir::Item.
+
+0.01  2013-02-02
+    - initial version (provides miscellaneous procedures to access and modify
+      individual directory entries of D64/D71/D81 disk images)
