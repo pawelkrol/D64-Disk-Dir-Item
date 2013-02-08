@@ -16,7 +16,7 @@ To install this module type the following:
 DOCUMENTATION
 -------------
 
-A comprehensive module documentation is available on [CPAN](http://search.cpan.org/~pawelkrol/D64-Disk-Dir-Item/lib/D64/Disk/Dir/Item.pm).
+A comprehensive module documentation is available on [CPAN](http://search.cpan.org/~pawelkrol/D64-Disk-Dir-Item/Item.pm).
 
 COPYRIGHT AND LICENCE
 ---------------------
