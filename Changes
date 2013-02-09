@@ -1,5 +1,12 @@
 Revision history for Perl extension D64::Disk::Dir::Item.
 
+0.02  2013-02-09
+    - added implementation of "empty" method, which verifies if directory item
+      contains information about the actual disk file or not
+    - added implementation of "writable" method, which verifies if directory
+      item is writable and can be replaced by any new file that would be written
+      into disk
+
 0.01  2013-02-02
     - initial version (provides miscellaneous procedures to access and modify
       individual directory entries of D64/D71/D81 disk images)

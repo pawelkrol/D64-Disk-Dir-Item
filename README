@@ -1,4 +1,4 @@
-D64::Disk::Dir::Item Version 0.01
+D64::Disk::Dir::Item Version 0.02
 =================================
 
 D64::Disk::Dir::Item provides a helper class for D64::Disk::Layout module,

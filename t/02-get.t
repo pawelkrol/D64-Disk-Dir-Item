@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::Exception;
-use Test::More tests => 30;
+use Test::More tests => 36;
 ########################################
 our $class;
 BEGIN {
@@ -187,5 +187,45 @@ sub get_item {
     my $item = get_item();
     my $size = $item->size();
     is($size, 0x01, 'get file size in sectors from a valid directory item');
+}
+########################################
+{
+    my $item = $class->new();
+    my $is_empty = $item->empty();
+    ok($is_empty, 'get empty flag from an empty directory item yields true');
+}
+########################################
+{
+    my $item = get_item();
+    my $is_empty = $item->empty();
+    ok(!$is_empty, 'get empty flag from a valid directory item yields false');
+}
+########################################
+{
+    my $item = $class->new();
+    my $is_writable = $item->writable();
+    ok($is_writable, 'get writable flag from an empty directory item yields true');
+}
+########################################
+{
+    my $item = get_item();
+    my $is_writable = $item->writable();
+    ok(!$is_writable, 'get writable flag from a valid directory item yields false');
+}
+########################################
+{
+    my $item = get_item();
+    $item->closed(1);
+    $item->type($T_DEL);
+    my $is_writable = $item->writable();
+    ok(!$is_writable, 'get writable flag from a closed DEL directory item yields false');
+}
+########################################
+{
+    my $item = get_item();
+    $item->closed(0);
+    $item->type($T_DEL);
+    my $is_writable = $item->writable();
+    ok($is_writable, 'get writable flag from a splat DEL directory item yields true');
 }
 ########################################

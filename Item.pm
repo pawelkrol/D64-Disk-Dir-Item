@@ -70,6 +70,12 @@ D64::Disk::Dir::Item - Handling individual Commodore (D64/D71/D81) disk image di
   # Validate item data against all possible errors:
   my $is_valid = $item->validate();
 
+  # Check if directory item contains information about the actual disk file:
+  my $is_empty = $item->empty();
+
+  # Check if directory item is writable and can be replaced by any new file:
+  my $is_writable = $item->writable();
+
   # Convert any given file type into its three-letter printable string representation:
   my $string = D64::Disk::Dir::Item->type_to_string($type);
 
@@ -86,7 +92,7 @@ use strict;
 use utf8;
 use warnings;
 
-our $VERSION = 0.01;
+our $VERSION = '0.02';
 
 use Data::Dumper;
 use Readonly;
@@ -716,6 +722,7 @@ sub print {
         my $locked = $self->locked() ? ord '<' : ord ' ';
         my $size = $self->size();
         my $name = sprintf "\"%s\"", petscii_to_ascii($self->name(padding_with_a0 => 0));
+        $name =~ s/\x00//g; # align file type string to the right column
         printf "%-4d  %-18s%c%s%c\n", $size, $name, $closed, $type, $locked;
     }
 
@@ -794,6 +801,42 @@ sub validate {
     };
 
     return $is_valid;
+}
+
+=head2
+
+Check if directory item contains information about the actual disk file:
+
+  my $is_empty = $item->empty();
+
+True value will be returned when directory item object is empty.
+
+=cut
+
+sub empty {
+    my ($self) = @_;
+
+    my $is_empty = not grep { ord ($_) != 0x00 } @{$self};
+
+    return $is_empty;
+}
+
+=head2
+
+Check if slot occupied by this item in a disk directory is writable and can be replaced by any new file that would be written into disk:
+
+  my $is_writable = $item->writable();
+
+True value will be returned when directory item object is writable.
+
+=cut
+
+sub writable {
+    my ($self) = @_;
+
+    my $is_writable = !$self->closed() && $self->type() eq $T_DEL;
+
+    return $is_writable;
 }
 
 =head2 type_to_string
@@ -875,7 +918,7 @@ Pawel Krol, E<lt>pawelkrol@cpan.orgE<gt>.
 
 =head1 VERSION
 
-Version 0.01 (2013-02-02)
+Version 0.02 (2013-02-09)
 
 =head1 COPYRIGHT AND LICENSE
 
