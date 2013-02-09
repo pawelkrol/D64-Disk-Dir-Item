@@ -803,7 +803,7 @@ sub validate {
     return $is_valid;
 }
 
-=head2
+=head2 empty
 
 Check if directory item contains information about the actual disk file:
 
@@ -821,7 +821,7 @@ sub empty {
     return $is_empty;
 }
 
-=head2
+=head2 writable
 
 Check if slot occupied by this item in a disk directory is writable and can be replaced by any new file that would be written into disk:
 
