@@ -10,3 +10,4 @@ t/03-set.t
 t/04-name.t
 t/05-data.t
 t/06-print.t
+t/07-clone.t

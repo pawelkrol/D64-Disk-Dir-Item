@@ -3,6 +3,7 @@ WriteMakefile(
     NAME             => 'D64::Disk::Dir::Item',
     VERSION_FROM     => 'Item.pm',
     PREREQ_PM        => {
+                            Clone                  => 0,
                             Data::Dumper           => 0,
                             IO::Scalar             => 0,
                             Readonly               => 0,

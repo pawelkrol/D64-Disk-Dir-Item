@@ -1,5 +1,8 @@
 Revision history for Perl extension D64::Disk::Dir::Item.
 
+0.03  2013-02-11
+    - added "clone" method that copies an entire D64::Disk::Dir::Item object
+
 0.02  2013-02-09
     - added implementation of "empty" method, which verifies if directory item
       contains information about the actual disk file or not
