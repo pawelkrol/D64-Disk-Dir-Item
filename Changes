@@ -1,5 +1,9 @@
 Revision history for Perl extension D64::Disk::Dir::Item.
 
+0.04  2013-02-13
+    - bug fixed: added missing dependency on parent, which is required to import
+      Clone module used to clone disk directory item object
+
 0.03  2013-02-11
     - added "clone" method that copies an entire D64::Disk::Dir::Item object
 
