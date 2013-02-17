@@ -3,6 +3,11 @@ D64-Disk-Dir-Item
 
 `D64::Disk::Dir::Item` provides a helper class for `D64::Disk::Layout` module, enabling users to manipulate individual directory entries in an object oriented way without the hassle of worrying about the meaning of individual bits and bytes describing each entry in a disk directory. Handling individual Commodore (D64/D71/D81) disk image directory items has been implemented in pure Perl.
 
+VERSION
+-------
+
+Version 0.04 (2013-02-17)
+
 INSTALLATION
 ------------
 
@@ -23,8 +28,6 @@ COPYRIGHT AND LICENCE
 
 Copyright (C) 2013 by Pawel Krol.
 
-This library is free open source software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.6 or, at your
-option, any later version of Perl 5 you may have available.
+This library is free open source software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.8.6 or, at your option, any later version of Perl 5 you may have available.
 
 PLEASE NOTE THAT IT COMES WITHOUT A WARRANTY OF ANY KIND!
