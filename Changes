@@ -1,5 +1,8 @@
 Revision history for Perl extension D64::Disk::Dir::Item.
 
+0.05  2013-02-23
+    - added support for wildcard-based pattern matching of item's filename
+
 0.04  2013-02-17
     - bug fixed: added missing dependency on parent, which is required to import
       Clone module that is used to clone disk directory item object

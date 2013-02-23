@@ -79,6 +79,9 @@ D64::Disk::Dir::Item - Handling individual Commodore (D64/D71/D81) disk image di
   # Clone disk directory item:
   my $clone = $item->clone();
 
+  # Check if filename matches given CBM ASCII pattern:
+  my $is_matched = $item->match_name($petscii_pattern);
+
   # Convert any given file type into its three-letter printable string representation:
   my $string = D64::Disk::Dir::Item->type_to_string($type);
 
@@ -95,7 +98,7 @@ use strict;
 use utf8;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use parent 'Clone';
 
@@ -850,6 +853,54 @@ Clone disk directory item:
 
   my $clone = $item->clone();
 
+=head2 match_name
+
+Check if filename matches given CBM ASCII pattern:
+
+  my $is_matched = $item->match_name($petscii_pattern);
+
+C<$petscii_pattern> is expected to be a CBM ASCII string containing optional wildcard characters. The following wildcards are allowed/recognized:
+
+=over
+
+=item *
+An asterisk C<*> character following any program name will yield successful match if filename is starting with that name.
+
+=item *
+A question mark C<?> character used as a wildcard will match any character in a filename.
+
+=back
+
+=cut
+
+sub match_name {
+    my ($self, $petscii_pattern) = @_;
+
+    my $name = $self->name(padding_with_a0 => 0);
+
+    my @name = split //, $name;
+    my @pattern = split //, $petscii_pattern;
+
+    for (my $i = 0; $i < @pattern; $i++) {
+        my $match_pattern = ord $pattern[$i];
+        if ($match_pattern == 0x2a) {
+            return 1;
+        }
+        my $character = $name[$i];
+        unless (defined $character && $match_pattern == 0x3f) {
+            if (!defined $character || ord $character != $match_pattern) {
+                return 0;
+            }
+        }
+    }
+
+    if (@name == @pattern) {
+        return 1;
+    }
+
+    return 0;
+}
+
 =head2 type_to_string
 
 Convert given file type into its three-letter printable ASCII string representation:
@@ -929,7 +980,7 @@ Pawel Krol, E<lt>pawelkrol@cpan.orgE<gt>.
 
 =head1 VERSION
 
-Version 0.04 (2013-02-17)
+Version 0.05 (2013-02-23)
 
 =head1 COPYRIGHT AND LICENSE
 
