@@ -105,7 +105,7 @@ use parent 'Clone';
 use Data::Dumper;
 use Readonly;
 use Scalar::Util qw(looks_like_number);
-use Text::Convert::PETSCII qw(:all);
+use Text::Convert::PETSCII qw(:convert);
 use Try::Tiny;
 
 require XSLoader;
@@ -722,7 +722,13 @@ sub print {
     my $stdout = select $fh;
 
     if ($as_petscii) {
-        print $fh $self->data();
+        my $type = $self->type_to_string($self->type(), 1);
+        my $closed = $self->closed() ? 0x20 : 0x2a; # "*"
+        my $locked = $self->locked() ? 0x3c : 0x20; # "<"
+        my $size = ascii_to_petscii($self->size());
+        my $name = sprintf "\"%s\"", $self->name(padding_with_a0 => 0);
+        $name =~ s/\x00//g; # align file type string to the right column
+        printf "%-4d %-18s%c%s%c\n", $size, $name, $closed, $type, $locked;
     }
     else {
         my $type = $self->type_to_string($self->type());
@@ -731,7 +737,7 @@ sub print {
         my $size = $self->size();
         my $name = sprintf "\"%s\"", petscii_to_ascii($self->name(padding_with_a0 => 0));
         $name =~ s/\x00//g; # align file type string to the right column
-        printf "%-4d  %-18s%c%s%c\n", $size, $name, $closed, $type, $locked;
+        printf "%-4d %-18s%c%s%c\n", $size, $name, $closed, $type, $locked;
     }
 
     select $stdout;
@@ -903,30 +909,52 @@ sub match_name {
 
 =head2 type_to_string
 
-Convert given file type into its three-letter printable ASCII string representation:
+Convert given file type into its three-letter printable ASCII/PETSCII string representation:
 
-  my $string = D64::Disk::Dir::Item->type_to_string($type);
+  my $string = D64::Disk::Dir::Item->type_to_string($type, $as_petscii);
+
+C<as_petscii> defaults to false (meaning that ASCII characters will be returned by default).
 
 =cut
 
 sub type_to_string {
-    my ($this, $type) = @_;
+    my ($this, $type, $as_petscii) = @_;
 
-    my @mapping = (
-        'del', # $T_DEL
-        'seq', # $T_SEQ
-        'prg', # $T_PRG
-        'usr', # $T_USR
-        'rel', # $T_REL
-        'cbm', # $T_CBM
-        'dir', # $T_DIR
-    );
+    unless ($as_petscii) {
+        my @mapping = (
+            'del', # $T_DEL
+            'seq', # $T_SEQ
+            'prg', # $T_PRG
+            'usr', # $T_USR
+            'rel', # $T_REL
+            'cbm', # $T_CBM
+            'dir', # $T_DIR
+        );
 
-    if ($type >= 0 && $type < @mapping) {
-        return $mapping[$type]
+        if ($type >= 0 && $type < @mapping) {
+            return $mapping[$type]
+        }
+        else {
+            return '???';
+        }
     }
     else {
-        return '???';
+        my @mapping = (
+            '44454c', # $T_DEL
+            '534551', # $T_SEQ
+            '505247', # $T_PRG
+            '555352', # $T_USR
+            '52454c', # $T_REL
+            '43424d', # $T_CBM
+            '444952', # $T_DIR
+        );
+
+        if ($type >= 0 && $type < @mapping) {
+            return pack 'H*', $mapping[$type];
+        }
+        else {
+            return pack 'H*', '3f3f3f';
+        }
     }
 }
 

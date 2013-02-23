@@ -24,7 +24,7 @@ sub get_item {
     $item->print(fh => $sh);
     my $print_out = ${$sh->sref};
     chomp $print_out;
-    is($print_out, '1     "test"             prg ', 'print out valid directory item in ASCII mode');
+    is($print_out, '1    "test"             prg ', 'print out valid directory item in ASCII mode');
 }
 ########################################
 {
@@ -39,7 +39,7 @@ sub get_item {
     $item->print(fh => $sh);
     my $print_out = ${$sh->sref};
     chomp $print_out;
-    is($print_out, '160   "newfile newfile" *rel<', 'print out modified directory item in ASCII mode');
+    is($print_out, '160  "newfile newfile" *rel<', 'print out modified directory item in ASCII mode');
 }
 ########################################
 {
@@ -47,9 +47,9 @@ sub get_item {
     my $item = get_item();
     $item->print(fh => $sh, as_petscii => 1);
     my $print_out = ${$sh->sref};
-    my @expected_bytes = qw(82 11 00 54 45 53 54 a0 a0 a0 a0 a0 a0 a0 a0 a0 a0 a0 a0 00 00 00 00 00 00 00 00 00 01 00);
-    my @expected_data = map { chr } map { hex } @expected_bytes;
-    my $expected_print_out = join '', @expected_data;
+    chomp $print_out;
+    my @expected_bytes = qw(31 20 20 20 20 22 54 45 53 54 22 20 20 20 20 20 20 20 20 20 20 20 20 20 50 52 47 20);
+    my $expected_print_out = join '', map { chr } map { hex } @expected_bytes;
     is($print_out, $expected_print_out, 'print out valid directory item in PETSCII mode');
 }
 ########################################
@@ -67,9 +67,8 @@ sub get_item {
     $item->print(fh => $sh, as_petscii => 1);
     my $print_out = ${$sh->sref};
     chomp $print_out;
-    my @expected_bytes = qw(44 13 03 4e 45 57 46 49 4c 45 20 4e 45 57 46 49 4c 45 a0 00 00 00 00 00 00 00 00 00 40 01);
-    my @expected_data = map { chr } map { hex } @expected_bytes;
-    my $expected_print_out = join '', @expected_data;
+    my @expected_bytes = qw(33 32 30 20 20 22 4e 45 57 46 49 4c 45 20 4e 45 57 46 49 4c 45 22 20 2a 52 45 4c 3c);
+    my $expected_print_out = join '', map { chr } map { hex } @expected_bytes;
     is($print_out, $expected_print_out, 'print out modified directory item in PETSCII mode');
 }
 ########################################

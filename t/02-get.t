@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::Exception;
-use Test::More tests => 36;
+use Test::More tests => 44;
 ########################################
 our $class;
 BEGIN {
@@ -31,42 +31,90 @@ sub get_item {
 ########################################
 {
     my $string = $class->type_to_string($T_DEL);
-    is($string, 'del', 'convert $T_DEL file type into "del" string');
+    is($string, 'del', 'convert $T_DEL file type into "del" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_SEQ);
-    is($string, 'seq', 'convert $T_SEQ file type into "seq" string');
+    is($string, 'seq', 'convert $T_SEQ file type into "seq" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_PRG);
-    is($string, 'prg', 'convert $T_PRG file type into "prg" string');
+    is($string, 'prg', 'convert $T_PRG file type into "prg" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_USR);
-    is($string, 'usr', 'convert $T_USR file type into "usr" string');
+    is($string, 'usr', 'convert $T_USR file type into "usr" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_REL);
-    is($string, 'rel', 'convert $T_REL file type into "rel" string');
+    is($string, 'rel', 'convert $T_REL file type into "rel" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_CBM);
-    is($string, 'cbm', 'convert $T_CBM file type into "cbm" string');
+    is($string, 'cbm', 'convert $T_CBM file type into "cbm" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string($T_DIR);
-    is($string, 'dir', 'convert $T_DIR file type into "dir" string');
+    is($string, 'dir', 'convert $T_DIR file type into "dir" ASCII string');
 }
 ########################################
 {
     my $string = $class->type_to_string(0xf0);
-    is($string, '???', 'convert invalid file type into "???" string');
+    is($string, '???', 'convert invalid file type into "???" ASCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_DEL, 1);
+    my $expected_string = join '', map { chr hex } qw(44 45 4c);
+    is($string, $expected_string, 'convert $T_DEL file type into "del" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_SEQ, 1);
+    my $expected_string = join '', map { chr hex } qw(53 45 51);
+    is($string, $expected_string, 'convert $T_SEQ file type into "seq" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_PRG, 1);
+    my $expected_string = join '', map { chr hex } qw(50 52 47);
+    is($string, $expected_string, 'convert $T_PRG file type into "prg" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_USR, 1);
+    my $expected_string = join '', map { chr hex } qw(55 53 52);
+    is($string, $expected_string, 'convert $T_USR file type into "usr" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_REL, 1);
+    my $expected_string = join '', map { chr hex } qw(52 45 4c);
+    is($string, $expected_string, 'convert $T_REL file type into "rel" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_CBM, 1);
+    my $expected_string = join '', map { chr hex } qw(43 42 4d);
+    is($string, $expected_string, 'convert $T_CBM file type into "cbm" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string($T_DIR, 1);
+    my $expected_string = join '', map { chr hex } qw(44 49 52);
+    is($string, $expected_string, 'convert $T_DIR file type into "dir" PETSCII string');
+}
+########################################
+{
+    my $string = $class->type_to_string(0xf0, 1);
+    my $expected_string = join '', map { chr hex } qw(3f 3f 3f);
+    is($string, $expected_string, 'convert invalid file type into "???" PETSCII string');
 }
 ########################################
 {
