@@ -98,7 +98,7 @@ use strict;
 use utf8;
 use warnings;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use parent 'Clone';
 
@@ -1008,7 +1008,7 @@ Pawel Krol, E<lt>pawelkrol@cpan.orgE<gt>.
 
 =head1 VERSION
 
-Version 0.05 (2013-02-23)
+Version 0.06 (2013-03-04)
 
 =head1 COPYRIGHT AND LICENSE
 

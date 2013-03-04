@@ -6,7 +6,7 @@ D64-Disk-Dir-Item
 VERSION
 -------
 
-Version 0.05 (2013-02-23)
+Version 0.06 (2013-03-04)
 
 INSTALLATION
 ------------

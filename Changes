@@ -1,6 +1,6 @@
 Revision history for Perl extension D64::Disk::Dir::Item.
 
-0.06  2013-02-23
+0.06  2013-03-04
     - bug fixed: printing out a directory item in PETSCII mode was previously
       only spitting out an item data instead of properly formatted disk entry
     - enhanced "type_to_string" subroutine with the possibility of converting
