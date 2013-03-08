@@ -299,12 +299,28 @@ sub get_data {
 }
 ########################################
 {
-    Readonly my $magic => 0b0100;
+    my $magic;
+    if ($] < 5.008) {
+        eval q{ Readonly \\$magic => 0b0100; };
+    }
+    else {
+        eval q{ Readonly $magic => 0b0100; };
+    }
     is($class->magic_to_int($magic), 4, "convert readonly's magic scalar value to internally recognized integer number")
 }
 ########################################
 {
-    Readonly my $magic => 'test';
+    my $magic;
+    if ($] < 5.008) {
+        eval q{
+            Readonly \\$magic => 'test';
+        };
+    }
+    else {
+        eval q{
+            Readonly $magic => 'test';
+        };
+    }
     is($class->magic_to_int($magic), undef, "convert readonly's magic string value to undef (conversion to integer not possible)")
 }
 ########################################

@@ -98,7 +98,7 @@ use strict;
 use utf8;
 use warnings;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use parent 'Clone';
 
@@ -111,27 +111,65 @@ use Try::Tiny;
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
-# File type constants:
-Readonly our $T_DEL => 0b000;
-Readonly our $T_SEQ => 0b001;
-Readonly our $T_PRG => 0b010;
-Readonly our $T_USR => 0b011;
-Readonly our $T_REL => 0b100;
-Readonly our $T_CBM => 0b101;
-Readonly our $T_DIR => 0b110;
+# Setup package constant names:
+our (
+    # File type constant names:
+    $T_DEL, $T_SEQ, $T_PRG, $T_USR, $T_REL, $T_CBM, $T_DIR,
 
-# Data offset constants:
-Readonly our $I_TYPE          => 0x00;
-Readonly our $I_CLOSED        => 0x00;
-Readonly our $I_LOCKED        => 0x00;
-Readonly our $I_TRACK         => 0x01;
-Readonly our $I_SECTOR        => 0x02;
-Readonly our $I_NAME          => 0x03;
-Readonly our $I_SIDE_TRACK    => 0x13;
-Readonly our $I_SIDE_SECTOR   => 0x14;
-Readonly our $I_RECORD_LENGTH => 0x15;
-Readonly our $I_SIZE_LO       => 0x1c;
-Readonly our $I_SIZE_HI       => 0x1d;
+    # Data offset constant names:
+    $I_TYPE, $I_NAME, $I_CLOSED, $I_LOCKED,
+    $I_TRACK, $I_SECTOR, $I_SIZE_LO, $I_SIZE_HI,
+    $I_SIDE_TRACK, $I_SIDE_SECTOR, $I_RECORD_LENGTH,
+
+    # Other package constant names:
+    $ITEM_SIZE,
+);
+
+# File type constant values:
+my %file_type_constants = (
+    T_DEL => 0b000,
+    T_SEQ => 0b001,
+    T_PRG => 0b010,
+    T_USR => 0b011,
+    T_REL => 0b100,
+    T_CBM => 0b101,
+    T_DIR => 0b110,
+);
+
+# Data offset constant values:
+my %data_offset_constants = (
+    I_TYPE          => 0x00,
+    I_CLOSED        => 0x00,
+    I_LOCKED        => 0x00,
+    I_TRACK         => 0x01,
+    I_SECTOR        => 0x02,
+    I_NAME          => 0x03,
+    I_SIDE_TRACK    => 0x13,
+    I_SIDE_SECTOR   => 0x14,
+    I_RECORD_LENGTH => 0x15,
+    I_SIZE_LO       => 0x1c,
+    I_SIZE_HI       => 0x1d,
+);
+
+# Other package constant values:
+my %other_package_constants = (
+    ITEM_SIZE => 0x1e,
+);
+
+# Setup package constant values:
+my %all_constants = (%file_type_constants, %data_offset_constants, %other_package_constants);
+while (my ($name, $value) = each %all_constants) {
+    if ($] < 5.008) {
+        eval sprintf q{
+            Readonly \\$%s => %d;
+        }, $name, $value;
+    }
+    else {
+       eval sprintf q{
+            Readonly $%s => %d;
+        }, $name, $value;
+    }
+}
 
 use base qw(Exporter);
 our %EXPORT_TAGS = ();
@@ -139,8 +177,6 @@ $EXPORT_TAGS{'types'} = [ qw($T_DEL $T_SEQ $T_PRG $T_USR $T_REL $T_CBM $T_DIR) ]
 $EXPORT_TAGS{'all'} = [ @{$EXPORT_TAGS{'types'}} ];
 our @EXPORT_OK = ( @{$EXPORT_TAGS{'all'}} );
 our @EXPORT = qw();
-
-Readonly our $ITEM_SIZE => 0x1e;
 
 =head2 new
 
@@ -679,7 +715,9 @@ sub size {
     my $size_lo = unpack 'C', $self->[$I_SIZE_LO];
     my $size_hi = unpack 'C', $self->[$I_SIZE_HI];
 
-    return $size_lo + 256 * $size_hi;
+    # Since a scalar value of a double type (NV) will always be loaded as the result
+    # of multiplication in Perl 5.6.2, we need to force an integer value into an SV:
+    return $self->set_iok($size_lo + 256 * $size_hi);
 }
 
 =head2 exact_size
@@ -984,6 +1022,14 @@ sub magic_to_int {
     return _magic_to_int($magic);
 }
 
+sub set_iok {
+    my ($self, $var) = @_;
+
+    my $var_iok = _set_iok($var);
+
+    return $var_iok;
+}
+
 =head1 BUGS
 
 There are no known bugs at the moment. Please report any bugs or feature requests.
@@ -1008,7 +1054,7 @@ Pawel Krol, E<lt>pawelkrol@cpan.orgE<gt>.
 
 =head1 VERSION
 
-Version 0.06 (2013-03-04)
+Version 0.07 (2013-03-08)
 
 =head1 COPYRIGHT AND LICENSE
 

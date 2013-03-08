@@ -43,3 +43,21 @@ _magic_to_int(magic)
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
+
+# my $var_iok = _set_iok($var);
+
+SV*
+_set_iok(var)
+        SV *var
+    CODE:
+        if (SvIOKp(var) || SvNOKp(var)) {
+            SvIOK_on(var);
+            if (SvNOK(var))
+                sv_setiv(var, (IV) SvNV(var));
+            RETVAL = newSViv(SvIV(var));
+        }
+        else {
+            XSRETURN_UNDEF;
+        }
+    OUTPUT:
+        RETVAL

@@ -12,7 +12,7 @@ WriteMakefile(
                             Test::Deep             => 0,
                             Test::Exception        => 0,
                             Test::More             => 0,
-                            Text::Convert::PETSCII => 0,
+                            Text::Convert::PETSCII => 0.05,
                             Try::Tiny              => 0,
                         },
     ($] >= 5.005 ?
