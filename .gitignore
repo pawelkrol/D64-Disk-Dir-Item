@@ -7,10 +7,13 @@ Build
 !Build/
 Build.bat
 .last_cover_stats
-Makefile
-Makefile.old
+Item.bs
+Item.c
+Item.o
 MANIFEST.bak
 META.yml
-MYMETA.yml
+MYMETA.json
+Makefile
+Makefile.old
 nytprof.out
 pm_to_blib

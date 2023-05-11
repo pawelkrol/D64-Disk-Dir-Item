@@ -6,7 +6,7 @@ D64-Disk-Dir-Item
 VERSION
 -------
 
-Version 0.07 (2013-03-08)
+Version 0.08 (2023-05-12)
 
 INSTALLATION
 ------------
@@ -26,7 +26,7 @@ A comprehensive module documentation is available on [CPAN](http://search.cpan.o
 COPYRIGHT AND LICENCE
 ---------------------
 
-Copyright (C) 2013 by Pawel Krol.
+Copyright (C) 2013-2023 by Pawel Krol.
 
 This library is free open source software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.8.6 or, at your option, any later version of Perl 5 you may have available.
 
