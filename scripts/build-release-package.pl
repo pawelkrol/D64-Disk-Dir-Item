@@ -11,7 +11,6 @@ use File::Temp qw(tempdir);
 use FindBin qw($Bin);
 use Getopt::Long;
 
-
 my $help;
 my $output_dir;
 my $manifest_file = 'MANIFEST';
@@ -69,13 +68,25 @@ sub setup_build_dir {
     my $manifest = `cat $manifest_file`;
     $manifest =~ s/\r\n/\n/g;
 
+    my %file_transformations = (
+        # target file => source file
+        'META.yml' => 'MYMETA.yml',
+    );
+
     print "Copying files:\n";
 
     my @filelist = split "\n", $manifest;
     for my $file (@filelist) {
 
-        my $source = sprintf '%s/../%s', $Bin, $file;
-        my $target = sprintf '%s/%s', $build_dir, $file;
+        my $source_file = $file;
+        my $target_file = $file;
+
+        if (exists $file_transformations{$target_file}) {
+            $source_file = $file_transformations{$target_file};
+        }
+
+        my $source = sprintf '%s/../%s', $Bin, $source_file;
+        my $target = sprintf '%s/%s', $build_dir, $target_file;
 
         (my $target_path = $target) =~ s!/[^/]+$!!;
         make_path($target_path, { verbose => 0, mode => 0755 });
