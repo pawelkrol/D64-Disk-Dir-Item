@@ -1,6 +1,8 @@
 D64-Disk-Dir-Item
 =================
 
+[![CPAN version](https://badge.fury.io/pl/D64-Disk-Dir-Item.png)](https://metacpan.org/pod/D64::Disk::Dir::Item)
+
 `D64::Disk::Dir::Item` provides a helper class for `D64::Disk::Layout` module, enabling users to manipulate individual directory entries in an object oriented way without the hassle of worrying about the meaning of individual bits and bytes describing each entry in a disk directory. Handling individual Commodore (D64/D71/D81) disk image directory items has been implemented in pure Perl.
 
 VERSION
